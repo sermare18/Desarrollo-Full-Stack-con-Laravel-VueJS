@@ -12,7 +12,7 @@
                         @csrf
 
                         <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">Title</label>
+                            <label for="title" class="col-md-4 col-form-label text-md-end">Title</label>
 
                             <div class="col-md-6">
                                 <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus>
@@ -25,7 +25,7 @@
                             </div>
                         </div>
                         
-                        <div class="col-md-8 offset-md-4">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="submit" class="btn btn-primary">
                                 Submit
                             </button>
