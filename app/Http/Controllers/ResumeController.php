@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Resume;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Intervention\Image\Facades\Image;
+
 
 class ResumeController extends Controller
 {
@@ -52,7 +54,10 @@ class ResumeController extends Controller
 
         ]);
 
-        return redirect()->route('resumes.index');
+        return redirect()->route('resumes.index')->with('alert', [
+            'type' => 'primary',
+            'message' => "Resume $resume->title created successfully"
+        ]);;
     }
 
     /**
@@ -88,12 +93,32 @@ class ResumeController extends Controller
             'website' => 'nullable|url',
             'picture' => 'nullable|image',
             'about' => 'nullable|string',
-            'title' => Rule::unique('resumes')->where(function($query) use ($resume) {
-                return $query->where('user_id', $resume->user->id);
-            })->ignore($resume->id)
+            // 'title' => Rule::unique('resumes')->where(function($query) use ($resume) {
+            //     return $query->where('user_id', $resume->user->id);
+            // })->ignore($resume->id)
+            'title' => Rule::unique('resumes')
+                ->where(fn($query) => $query->where('user_id', $resume->user->id))
+                ->ignore($resume->id)
         ]);
+        
+        if(array_key_exists('picture', $data)) {
+            // $picture será un objeto de tipo UploadedFile y tendrá un método llamado store()
+            // Almacenamos la imagen en la carpeta pictures que se encuentra dentro de la carpeta storage/app/public y está conectada mediante enlace simbólico a public/storage
+            // Para crear el enlace simbólico se ha utilizado el comando 'php artisan storage:link'
+            $picture = $data['picture']->store('pictures', 'public');
+            Image::make(public_path("storage/$picture"))->fit(800, 800)->save();
+            // Guardamos en el campo picture de data la ruta de la imagen en nuestro servidor
+            $data['picture'] = $picture;
+        }
 
-        dd($data);
+        // Después de la validación de los datos actualizamos el currículum
+        $resume->update($data);
+
+        // Redirigimos a resumes.index he introducimos en la sesión información sobre la alerta que debe mostrar
+        return redirect()->route('resumes.index')->with('alert', [
+            'type' => 'success',
+            'message' => "Resume $resume->title updated successfully"
+        ]);
     }
 
     /**
