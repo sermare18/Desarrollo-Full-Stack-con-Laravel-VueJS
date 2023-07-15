@@ -13,6 +13,7 @@ class ResumeController extends Controller
     public function __construct() 
     {
         // Establecemos un middleware de autentificación a todas las rutas de ResumeController
+        // Para que no se pueda acceder a ningún método de este controlador sin estar logeado
         $this->middleware('auth');
     }
     /**
@@ -78,6 +79,14 @@ class ResumeController extends Controller
         // $resume = Resume::where('id', $request->resume)->first();
         // Otra forma
         // dd($resume);
+
+        // Politica de forma MANUAL, mejor opción generar un fichero policy para el modelo Resume con el comando 'php artisan make:policy --model=Resume'
+        // if ($resume->user->id != auth()->user()->id) {
+        //     abort(403);
+        // }
+        
+        // Ya con policy
+        $this->authorize('update', $resume);
         return view('resumes.edit', compact('resume'));
     }
 
@@ -126,6 +135,13 @@ class ResumeController extends Controller
      */
     public function destroy(Resume $resume)
     {
-        //
+        $this->authorize('delete', $resume);
+
+        $resume->delete();
+
+        return redirect()->route('resumes.index')->with('alert', [
+            'type' => 'danger',
+            'message' => "Resume $resume->title deleted successfully"
+        ]);
     }
 }

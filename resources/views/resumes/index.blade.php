@@ -31,9 +31,14 @@
                                 </a>
                             </div>
                             <div class="ms-2">
-                                <a href="{{ route('resumes.destroy', $resume->id) }}" class="btn btn-danger">
-                                    Delete
-                                </a>
+                                {{-- La unica forma de hacer un DELETE es con un formulario --}}
+                                <form method="POST" action="{{ route('resumes.destroy', $resume->id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">
+                                        Delete
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </td>
