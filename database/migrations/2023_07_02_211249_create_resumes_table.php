@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('website')->nullable();
-            $table->string('picture')->nullable();
+            $table->string('picture')->default('/storage/pictures/default.png');
             $table->text('about')->nullable();
         });
     }

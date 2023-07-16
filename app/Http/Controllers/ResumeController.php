@@ -66,7 +66,7 @@ class ResumeController extends Controller
      */
     public function show(Resume $resume)
     {
-        //
+        return view('resumes.show', compact('resume'));
     }
 
     /**
@@ -87,6 +87,7 @@ class ResumeController extends Controller
         
         // Ya con policy
         $this->authorize('update', $resume);
+
         return view('resumes.edit', compact('resume'));
     }
 
@@ -117,7 +118,7 @@ class ResumeController extends Controller
             $picture = $data['picture']->store('pictures', 'public');
             Image::make(public_path("storage/$picture"))->fit(800, 800)->save();
             // Guardamos en el campo picture de data la ruta de la imagen en nuestro servidor
-            $data['picture'] = $picture;
+            $data['picture'] = "/storage/$picture";
         }
 
         // Después de la validación de los datos actualizamos el currículum
