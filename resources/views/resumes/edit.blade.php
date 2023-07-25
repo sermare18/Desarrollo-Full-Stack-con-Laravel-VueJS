@@ -89,6 +89,11 @@
                                 </span>
                             @enderror
                         </div>
+
+                        {{-- Incrustación de componente vue --}}
+                        <div class="mb-3">
+                            <example-component/>
+                        </div>
                         
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <button type="submit" class="btn btn-primary">
