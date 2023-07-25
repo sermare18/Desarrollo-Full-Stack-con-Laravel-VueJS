@@ -103,6 +103,8 @@ class ResumeController extends Controller
             'website' => 'nullable|url',
             'picture' => 'nullable|image',
             'about' => 'nullable|string',
+            'skills' => 'nullable|array',
+            'skills.*' => 'string',
             // 'title' => Rule::unique('resumes')->where(function($query) use ($resume) {
             //     return $query->where('user_id', $resume->user->id);
             // })->ignore($resume->id)

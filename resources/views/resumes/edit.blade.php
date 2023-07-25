@@ -90,9 +90,12 @@
                             @enderror
                         </div>
 
-                        {{-- Incrustación de componente vue --}}
+                        {{-- Incrustación de componente vue, le mandamos propiedades --}}
                         <div class="mb-3">
-                            <example-component/>
+                            <skills 
+                                v-bind:skills="{{ $resume->skills ?? '[]' }}"
+                                v-bind:errors="{{ json_encode(collect($errors->get('skills.*'))->flatten()) }}"
+                            />
                         </div>
                         
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
